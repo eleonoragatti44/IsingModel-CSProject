@@ -96,13 +96,15 @@ class Ising():
                 # what is k_B???
                 if np.random.uniform() < np.exp(-deltaE/self.T):
                     self.flip_one_point(i, j)
-                    
-                    
-                    
-                    
-                    
-                    
+                           
+    """
+    Taken from
+    http://pages.physics.cornell.edu/~myers/teaching/ComputationalMethods/ComputerExercises/PythonSoftware/Ising.py
 
+    and slightly modified by
+    E. Gatti, G. Taiocchi
+    """
+                    
     def WolffMove(self):
         """
         Faster, list-based Wolff move.
@@ -163,11 +165,3 @@ class Ising():
             partialSweep = partialSweep - self.N
         return partialSweep
 
-"""
-Taken from
-http://pages.physics.cornell.edu/~myers/teaching/ComputationalMethods/ComputerExercises/PythonSoftware/Ising.py
-
-and slightly modified by
-Francesc Font-Clos
-May 2018
-"""
