@@ -28,7 +28,7 @@ class Ising():
         B = self.B
         N = self.N
         mf = self.mag[-1] 
-        deltaE = s * (8*J*mf-2*B) - 8*J/N
+        deltaE = s * (4*J*mf-2*B) - 4*J/N
         return deltaE
     
     def get_total_interaction(self):
