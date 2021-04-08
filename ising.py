@@ -17,6 +17,7 @@ class Ising():
 
     # Compute the interaction between one spin and first neighbors
     def get_onepoint_interaction(self,i,j):
+        self.update_ham() # this is for magnetization plot
         interaction = - self.J * self.matrix[i,j] * (self.matrix[(i+1)%self.n1,j]+self.matrix[i-1,j]
                                                      +self.matrix[i,(j+1)%self.n2]+self.matrix[i,j-1])
         return(interaction)
@@ -165,3 +166,23 @@ class Ising():
             partialSweep = partialSweep - self.N
         return partialSweep
 
+    def SweepWolff(self, nTimes=1, partialSweep=0):
+        """
+        Do nTimes sweeps of the Wolff algorithm, returning partialSweep
+        (1) The variable partialSweep is the number of `extra' spins flipped
+        in the previous Wolff cluster moved that belong to the current sweep.
+        (2) A sweep is comprised of Wolff cluster moves until at least
+        N*N-partialSweep spins have flipped. (Just add the spinsFlipped
+        from WolffMove to partialSweep, while partialSweep < N*N, the
+        new partialSweep is the current one minus N*N.)
+        (3) Return the new value of partialSweep after nTimes sweeps.
+        (4) You might print an error message if the field is not zero
+        
+        if self.B != 0.:
+            print("Field will be ignored by Wolff algorithm")
+        """
+        for time in range(nTimes):
+            while partialSweep < self.N:
+                partialSweep += self.WolffMove()
+            partialSweep = partialSweep - self.N
+        return partialSweep
