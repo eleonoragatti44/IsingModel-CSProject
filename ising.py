@@ -15,7 +15,7 @@ class Ising():
         self.J = J
         self.T = T
 
-    # Compute the interaction between one spin and first neighbors
+    # compute the interaction between one spin and first neighbors
     def get_onepoint_interaction(self,i,j):
         self.update_ham() # this is for magnetization plot
         interaction = - self.J * self.matrix[i,j] * (self.matrix[(i+1)%self.n1,j]+self.matrix[i-1,j]
@@ -29,8 +29,7 @@ class Ising():
         B = self.B
         N = self.N
         mf = self.mag[-1] 
-        deltaE = s * (8*J*mf-4*B) 
-
+        deltaE = s * (8*J*mf-4*B)
         return deltaE
     
     def get_total_interaction(self):
@@ -45,8 +44,6 @@ class Ising():
             (i-1, j, i, j)
             for i in range(self.n1) for j in range(self.n2)
         ]
-        # summing lists in python concatenates them
-        # [1, 2, 3] + [4, 5] = [1, 2, 3, 4, 5]
         edges = horizontal_edges + vertical_edges
         E = 0
         for i1, j1, i2, j2 in edges:
@@ -73,7 +70,8 @@ class Ising():
         im = ax.imshow(self.matrix, cmap = 'binary')
         plt.show()
 
-    # deltaE -> difference btw final energy and initial energy of the single point (before and after the eventual swap)
+    # deltaE -> difference between final energy and initial energy of the single point
+    # (before and after the eventual swap)
     def metropolis(self, n_updates):
         for _ in range(n_updates):
             i = np.random.randint(self.n1)
@@ -83,7 +81,6 @@ class Ising():
             if deltaE < 0:
                 self.flip_one_point(i, j)
             else:
-                # what is k_B???
                 if np.random.uniform() < np.exp(-deltaE/self.T):
                     self.flip_one_point(i, j)
               
@@ -95,14 +92,11 @@ class Ising():
             if deltaE < 0:
                 self.flip_one_point(i, j)
             else:
-                # what is k_B???
                 if np.random.uniform() < np.exp(-deltaE/self.T):
                     self.flip_one_point(i, j)
                            
     """
-    Taken from
-    http://pages.physics.cornell.edu/~myers/teaching/ComputationalMethods/ComputerExercises/PythonSoftware/Ising.py
-
+    Taken from    http://pages.physics.cornell.edu/~myers/teaching/ComputationalMethods/ComputerExercises/PythonSoftware/Ising.py
     and slightly modified by
     E. Gatti, G. Taiocchi
     """
