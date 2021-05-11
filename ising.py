@@ -160,3 +160,56 @@ class Ising():
                 partialSweep += self.WolffMove()
             partialSweep = partialSweep - self.N
         return partialSweep
+    
+    
+    
+####################################################################################################
+
+'''
+Functions used in the Ising2D notebook
+'''
+
+def compute_mag_wolff(n1,n2,B,J,t1,t2,n_temperatures,n_repetitions):
+    temperatures = np.linspace(t1,t2,n_temperatures)
+    magnetizations = np.zeros(n_temperatures)
+    for i, t in enumerate (temperatures):
+        ising = Ising(n1, n2, t, B, J)
+        ising.SweepWolff(n_repetitions)
+        ising.update_mag()
+        magnetizations[i] = abs(ising.mag[-1])
+        #print ( '[',t,',',magnetizations[i],']')
+    return(temperatures, magnetizations)
+
+def onsager_solution():
+    T_c = 2/np.log(1+np.sqrt(2))
+    x = np.linspace(0,T_c-0.0001,10000000)
+    x2 = np.linspace(T_c,4,3)
+    x_fin = np.append(x,x2)
+    y_fin = np.append((1-(np.sinh(2/x))**(-4) )**(1/8),[0,0,0])
+    return  x_fin, y_fin
+
+
+def mag_evol(n1,n2,B,J,t1,t2,n_temperatures,n_repetitions):
+    temperatures = np.linspace(t1,t2,n_temperatures)
+    #magnetizations = [[]] * n_temperatures
+    magnetizations = np.zeros((n_temperatures, n_repetitions))
+    for i, t in enumerate(temperatures):
+        ising = Ising(n1, n2, t, B, J)
+        print(i, end="\r")
+        for j in range(n_repetitions):
+            ising.update_mag()
+            ising.SweepWolff()
+            magnetizations[i][j] = (ising.mag[-1])
+    return(temperatures, magnetizations)
+
+def mag_evol_mf(n1,n2,B,J,t1,t2,n_temperatures,n_repetitions):
+    temperatures = np.linspace(t1,t2,n_temperatures)
+    magnetizations = np.zeros((n_temperatures, n_repetitions))
+    for i, t in enumerate(temperatures):
+        ising = Ising(n1, n2, t, B, J)
+        print(i, end="\r")
+        for j in range(n_repetitions):
+            ising.update_mag()
+            ising.metropolis_mf(160000) #160.000 PER LATTICE 400x400
+            magnetizations[i][j] = (ising.mag[-1])
+    return(temperatures, magnetizations)
