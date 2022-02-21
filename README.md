@@ -11,4 +11,5 @@ Inthispaperwestudythebehaviourofthewellknown“Ising Model” on a 2D lattice in
 Contributors
 
 Eleonora Gatti - University of Milan 
+
 Giulio Taiocchi - University of Milan
